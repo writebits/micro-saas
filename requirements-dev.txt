@@ -1,0 +1,3 @@
+# Dependências de desenvolvimento / automação de demonstração.
+-r requirements.txt
+playwright>=1.44

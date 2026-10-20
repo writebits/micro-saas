@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrafficReport AI — Relatórios de Tráfego Pago</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="bg-gradient"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◆</span>
+      <span>TrafficReport <strong>AI</strong></span>
+    </div>
+    <nav class="topnav">
+      <a href="/docs" target="_blank">API Docs</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Relatórios de tráfego pago em <span>segundos</span></h1>
+      <p>Faça upload do CSV do Meta Ads ou Google Ads, extraia as métricas automaticamente,
+         gere insights com IA e exporte um PDF pronto para o cliente.</p>
+    </section>
+
+    <section class="card upload-card">
+      <h2>1. Envie seu relatório</h2>
+      <div class="form-row">
+        <label for="agency">Nome da agência</label>
+        <input type="text" id="agency" placeholder="Ex.: Growth Performance Co." value="Growth Performance Co." />
+      </div>
+
+      <div id="dropzone" class="dropzone">
+        <input type="file" id="fileInput" accept=".csv" hidden />
+        <div class="dropzone-inner">
+          <div class="dz-icon">⬆</div>
+          <p><strong>Clique para selecionar</strong> ou arraste o arquivo CSV aqui</p>
+          <span id="fileName" class="file-name">Nenhum arquivo selecionado</span>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button id="sampleBtn" class="btn ghost" type="button">Usar dados de exemplo</button>
+        <button id="uploadBtn" class="btn primary" type="button" disabled>Processar relatório</button>
+      </div>
+      <div id="uploadStatus" class="status"></div>
+    </section>
+
+    <section id="results" class="results hidden">
+      <div class="card">
+        <div class="results-head">
+          <h2>2. Métricas extraídas</h2>
+          <span id="sourceBadge" class="badge"></span>
+        </div>
+
+        <div id="kpis" class="kpi-grid"></div>
+
+        <h3 class="subtitle">Desempenho por campanha</h3>
+        <div class="table-wrap">
+          <table id="campaignTable">
+            <thead>
+              <tr>
+                <th>Campanha</th><th>Impressões</th><th>Cliques</th><th>Investimento</th>
+                <th>CTR</th><th>CPC</th><th>CPM</th><th>Conv.</th><th>ROAS</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="results-head">
+          <h2>3. Insights com Inteligência Artificial</h2>
+          <button id="insightsBtn" class="btn primary" type="button">Gerar insights</button>
+        </div>
+        <div id="insightsStatus" class="status"></div>
+        <div id="insights" class="insights hidden">
+          <div class="insight">
+            <h4>Resumo Executivo</h4>
+            <p id="insResumo"></p>
+          </div>
+          <div class="insight">
+            <h4>Destaques Positivos e Gargalos</h4>
+            <p id="insDestaques"></p>
+          </div>
+          <div class="insight">
+            <h4>Ações de Otimização Recomendadas</h4>
+            <ol id="insAcoes"></ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="card pdf-card">
+        <div>
+          <h2>4. Exporte o relatório</h2>
+          <p class="muted">PDF visual com cabeçalho, KPIs, tabela e análise da IA.</p>
+        </div>
+        <button id="pdfBtn" class="btn accent" type="button">Baixar PDF</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>TrafficReport AI — Micro-SaaS de automação de relatórios · FastAPI + Pandas + OpenAI</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

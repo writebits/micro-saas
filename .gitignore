@@ -1,0 +1,19 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Ambiente
+.env
+
+# Gravações / artefatos locais
+recordings/
+*.pdf
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

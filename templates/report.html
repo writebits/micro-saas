@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    @page {
+      size: A4;
+      margin: 1.6cm 1.4cm;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Helvetica", "Arial", sans-serif;
+      color: #1f2937;
+      font-size: 11px;
+      margin: 0;
+    }
+    h1, h2, h3 { margin: 0; }
+    .header {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #4f46e5;
+      color: #ffffff;
+      margin-bottom: 18px;
+    }
+    .header td { padding: 16px 18px; vertical-align: middle; }
+    .header .agency { font-size: 18px; font-weight: bold; }
+    .header .subtitle { font-size: 11px; color: #e0e7ff; }
+    .header .meta { font-size: 10px; color: #e0e7ff; text-align: right; }
+    .section-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #4f46e5;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 4px;
+      margin: 18px 0 10px 0;
+    }
+    .kpi-table { width: 100%; border-collapse: separate; border-spacing: 6px; }
+    .kpi-card {
+      background-color: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+    }
+    .kpi-label { font-size: 9px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
+    .kpi-value { font-size: 15px; font-weight: bold; color: #111827; padding-top: 4px; }
+    table.data { width: 100%; border-collapse: collapse; margin-top: 6px; }
+    table.data th {
+      background-color: #4f46e5;
+      color: #ffffff;
+      font-size: 9px;
+      text-transform: uppercase;
+      padding: 6px 5px;
+      text-align: right;
+    }
+    table.data th.left, table.data td.left { text-align: left; }
+    table.data td { padding: 6px 5px; font-size: 10px; text-align: right; border-bottom: 1px solid #eef2f7; }
+    table.data tr.alt td { background-color: #f8fafc; }
+    .insight-block { margin-bottom: 12px; }
+    .insight-heading { font-size: 11px; font-weight: bold; color: #111827; margin-bottom: 3px; }
+    .insight-text { font-size: 10.5px; color: #374151; line-height: 1.5; }
+    ol.actions { margin: 4px 0 0 16px; padding: 0; }
+    ol.actions li { font-size: 10.5px; color: #374151; margin-bottom: 4px; line-height: 1.5; }
+    .badge {
+      display: inline-block;
+      background-color: #eef2ff;
+      color: #4f46e5;
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .footer { margin-top: 20px; font-size: 9px; color: #9ca3af; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 8px; }
+  </style>
+</head>
+<body>
+
+  <table class="header">
+    <tr>
+      <td>
+        <div class="agency">{{ agency_name }}</div>
+        <div class="subtitle">Relatório de Desempenho de Tráfego Pago</div>
+      </td>
+      <td class="meta">
+        Fonte: {{ report.source.value | replace("_", " ") | title }}<br />
+        Gerado em {{ generated_at }}
+      </td>
+    </tr>
+  </table>
+
+  <div class="section-title">KPIs Principais</div>
+  <table class="kpi-table">
+    <tr>
+      <td class="kpi-card" width="25%">
+        <div class="kpi-label">Investimento</div>
+        <div class="kpi-value">{{ metrics.spend | currency_br }}</div>
+      </td>
+      <td class="kpi-card" width="25%">
+        <div class="kpi-label">Impressões</div>
+        <div class="kpi-value">{{ metrics.impressions | int_br }}</div>
+      </td>
+      <td class="kpi-card" width="25%">
+        <div class="kpi-label">Cliques</div>
+        <div class="kpi-value">{{ metrics.clicks | int_br }}</div>
+      </td>
+      <td class="kpi-card" width="25%">
+        <div class="kpi-label">Conversões</div>
+        <div class="kpi-value">{{ metrics.conversions | int_br }}</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="kpi-card" width="25%">
+        <div class="kpi-label">CTR</div>
+        <div class="kpi-value">{{ metrics.ctr | percent_br }}</div>
+      </td>
+      <td class="kpi-card" width="25%">
+        <div class="kpi-label">CPC</div>
+        <div class="kpi-value">{{ metrics.cpc | currency_br }}</div>
+      </td>
+      <td class="kpi-card" width="25%">
+        <div class="kpi-label">CPM</div>
+        <div class="kpi-value">{{ metrics.cpm | currency_br }}</div>
+      </td>
+      <td class="kpi-card" width="25%">
+        <div class="kpi-label">ROAS</div>
+        <div class="kpi-value">{{ metrics.roas | decimal_br }}x</div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="section-title">Desempenho por Campanha</div>
+  <table class="data">
+    <thead>
+      <tr>
+        <th class="left">Campanha</th>
+        <th>Impressões</th>
+        <th>Cliques</th>
+        <th>Invest.</th>
+        <th>CTR</th>
+        <th>CPC</th>
+        <th>CPM</th>
+        <th>Conv.</th>
+        <th>ROAS</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in campaigns %}
+      <tr class="{{ 'alt' if loop.index0 % 2 else '' }}">
+        <td class="left">{{ c.campaign_name }}</td>
+        <td>{{ c.impressions | int_br }}</td>
+        <td>{{ c.clicks | int_br }}</td>
+        <td>{{ c.spend | currency_br }}</td>
+        <td>{{ c.ctr | percent_br }}</td>
+        <td>{{ c.cpc | currency_br }}</td>
+        <td>{{ c.cpm | currency_br }}</td>
+        <td>{{ c.conversions | int_br }}</td>
+        <td>{{ c.roas | decimal_br }}x</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if insights %}
+  <div class="section-title">
+    Análise por Inteligência Artificial
+    <span class="badge">{{ 'Gerado por IA' if insights.generated_by == 'openai' else 'Análise automática' }}</span>
+  </div>
+
+  <div class="insight-block">
+    <div class="insight-heading">1. Resumo Executivo</div>
+    <div class="insight-text">{{ insights.resumo_executivo }}</div>
+  </div>
+
+  <div class="insight-block">
+    <div class="insight-heading">2. Destaques Positivos e Gargalos</div>
+    <div class="insight-text">{{ insights.destaques_positivos_e_gargalos }}</div>
+  </div>
+
+  <div class="insight-block">
+    <div class="insight-heading">3. Ações de Otimização Recomendadas</div>
+    <ol class="actions">
+      {% for acao in insights.acoes_de_otimizacao %}
+      <li>{{ acao }}</li>
+      {% endfor %}
+    </ol>
+  </div>
+  {% endif %}
+
+  <div class="footer">
+    Relatório gerado automaticamente por TrafficReport AI — {{ agency_name }}
+  </div>
+
+</body>
+</html>
